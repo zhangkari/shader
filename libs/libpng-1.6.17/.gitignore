@@ -1,0 +1,16 @@
+.libs
+libpng.vers
+libpng16-config
+libpng16.pc
+png-fix-itxt
+pngfix
+pngimage
+pnglibconf.c
+pnglibconf.h
+pnglibconf.out
+pngprefix.h
+pngstest
+pngtest
+pngunknown
+pngvalid
+scripts/vers.out

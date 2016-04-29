@@ -1,0 +1,16 @@
+#
+# Ignore *.o *.so *.lo *.a
+*.o
+*.so
+*.lo
+*.a
+*.la
+
+# Ignore files in debug except CMakeLists.txt
+debug/*
+!debug/CMakeLists.txt
+
+#
+# Ignore files in release except CMakeLists.txt
+release/*
+!release/CMakeLists.txt
