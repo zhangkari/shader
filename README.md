@@ -14,8 +14,6 @@ include:
  dependency:   
 - **jpg**     ：jpg-9a；   
 - **png**     ：libpng-1.6.17；   
-- **cJSON**   ：parse json in C lib；   
-- **CppUnit** ：cppunit-1.13.2
 
 -------------------
 
