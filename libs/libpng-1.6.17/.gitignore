@@ -14,3 +14,14 @@ pngtest
 pngunknown
 pngvalid
 scripts/vers.out
+
+Makefile
+libpng-config
+libpng.pc
+CMakeCache.txt
+CMakeFiles
+CTestTestfile.cmake
+cmake_install.cmake
+libs
+libpng16.so.16
+libpng16.so.16.17.0

@@ -4,3 +4,7 @@ jpegtran
 rdjpgcom
 wrjpgcom
 .libs
+Makefile
+CMakeCache.txt
+CMakeFiles
+cmake_install.cmake
