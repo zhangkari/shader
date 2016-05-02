@@ -8,3 +8,7 @@ Makefile
 CMakeCache.txt
 CMakeFiles
 cmake_install.cmake
+.deps
+config.log
+config.status
+libtool
