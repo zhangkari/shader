@@ -10,18 +10,20 @@
 
 #include <stdio.h>
 
+#ifdef DEBUG
+#define print_log(...) printf(...)
+#else 
+#define rpint_log(fmt, args...)
+#endif
+
 class Log {
 	public:
 		static void e(...) {
-#if 0
-			printf(__VA_ARGS__); 
-#endif
+//			print_log(...);
 		}
 
 		static void d(...) {
-#if 0
-			printf(__VA_ARGS__);
-#endif
+//			print_log(...);
 		}
 };
 

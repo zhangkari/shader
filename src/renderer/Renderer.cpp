@@ -22,3 +22,7 @@ void Renderer :: render() {
 void Renderer :: resize(int w, int h) {
 
 }
+
+void Renderer :: setArtwork(Bitmap *bitmap) {
+	mArtwork = bitmap;
+}

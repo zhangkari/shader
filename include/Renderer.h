@@ -11,6 +11,8 @@
 #include <GL/gl.h>
 #include <GL/glext.h>
 
+#include "Bitmap.h"
+
 #define MAX_INSTANCES_PER_SIDE 16
 #define MAX_INSTANCES (MAX_INSTANCES_PER_SIDE * MAX_INSTANCES_PER_SIDE)
 
@@ -24,6 +26,7 @@ class Renderer {
 		virtual ~Renderer();
 		void resize(int w, int h);
 		void render();
+		void setArtwork(Bitmap* bitmap);
 
 	protected:
 		Renderer();
@@ -33,6 +36,7 @@ class Renderer {
 		float mScale[2];
 		int mNumInstances;
 		float mAngles[MAX_INSTANCES];
+		Bitmap *mArtwork;
 };
 
 #endif

@@ -5,6 +5,7 @@
  * date:		2016-4-29
  ******************************************/
 
+#include "Bitmap.h"
 #include "RealtimeRenderer.h"
 
 RealtimeRenderer :: ~RealtimeRenderer() {
@@ -12,16 +13,23 @@ RealtimeRenderer :: ~RealtimeRenderer() {
 }
 
 void RealtimeRenderer::draw(int numInstance) {
-	glBegin(GL_TRIANGLES);	
-	{
-		glColor3f(1.0f, 0.0f, 0.0f);	
-		glVertex2f(0.0f, 0.0f);
 
-		glColor3f(0.0f, 1.0f, 0.0f);	
-		glVertex2f(1.0f, 0.0f);
+		if (mArtwork == NULL) {
+				return;
+		}
 
-		glColor3f(0.0f, 0.0f, 1.0f);	
-		glVertex2f(0.5f, 1.0f);
-	}
-	glEnd();
+		int fmt = GL_BGR;
+		switch (mArtwork->getFmt()) {
+				case RGBA32:
+						fmt = GL_BGRA;
+						break;
+		}
+
+		glDrawPixels(mArtwork->getWidth(), 
+						mArtwork->getHeight(), 
+						fmt, 
+						GL_UNSIGNED_BYTE, 
+						mArtwork->getBlock());
+
+
 }

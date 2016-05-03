@@ -7,6 +7,7 @@
 
 #include <assert.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "jpeglib.h"
@@ -14,7 +15,42 @@
 #include "Bitmap.h"
 #include "Log.h"
 
+Bitmap :: Bitmap(int width, int height, PixFmt fmt) {
+
+	assert (width > 0 && height > 0);
+
+	mWidth = width;
+	mHeight = height;
+	mFmt = fmt;
+	mBlock = (char *)calloc(1, width * height * fmt);
+	assert(NULL != mBlock);
+}
+
+void Bitmap :: recycle() {
+	if (NULL != mBlock) {
+		free (mBlock);
+		mBlock = NULL;
+	}
+}
+
+int Bitmap :: getWidth() {
+	return mWidth;
+}
+
+int Bitmap :: getHeight() {
+	return mHeight;
+}
+
+PixFmt Bitmap :: getFmt() {
+	return mFmt;
+}
+
+const char * const Bitmap :: getBlock() {
+	return mBlock;
+}
+
 static const char* getFilePostfix (const char* path) {
+
 	if (NULL == path) {
 		return NULL;
 	}
@@ -48,7 +84,7 @@ Bitmap* Bitmap :: load(const char *path)
 
     const char *postfix = getFilePostfix (path);
     if (NULL == postfix) {
-        Log::e("Failed getFilePostfix in loadImage\n");
+        printf("Failed getFilePostfix in loadImage\n");
         return NULL;
     }
 
@@ -60,7 +96,7 @@ Bitmap* Bitmap :: load(const char *path)
         return readPng (path);
     }
     else {
-        Log::e("Invalid postfix name (%s) in loadImage\n", postfix);
+        printf("Invalid postfix name (%s) in loadImage\n", postfix);
         return NULL;
     }
 }
@@ -82,7 +118,7 @@ bool Bitmap :: save(const char *path)
 
     const char *postfix = getFilePostfix (path);
     if (NULL == postfix) {
-        Log::e("Failed getFilePostfix in saveImage\n");
+        printf("Failed getFilePostfix in saveImage\n");
         return false;
     }
 
@@ -94,7 +130,7 @@ bool Bitmap :: save(const char *path)
         return writePng (path);
     }
     else {
-        Log::e("Invalid postfix name (%s) in saveImage\n", postfix);
+        printf("Invalid postfix name (%s) in saveImage\n", postfix);
         return false;
     }
 }
@@ -113,7 +149,7 @@ Bitmap* Bitmap :: readJpg(const char *path)
 	}
     FILE *fp = fopen (path, "rb");
     if (NULL == fp) {
-        Log::e("Failed open %s\n", path);
+        printf("Failed open %s\n", path);
         return NULL;
     }
 
@@ -124,7 +160,7 @@ Bitmap* Bitmap :: readJpg(const char *path)
     jpeg_stdio_src (&jds, fp);
     jpeg_read_header (&jds, TRUE);
 
-    Log::d("[%s %d x %d %d]\n", path, jds.image_width, jds.image_height, jds.num_components);
+    printf("[%s %d x %d %d]\n", path, jds.image_width, jds.image_height, jds.num_components);
 
 	PixFmt bpp = RGBA32;
 	switch (jds.num_components) {
@@ -253,10 +289,10 @@ Bitmap* Bitmap :: readPng(const char *path)
     }
 
     if (bpp == 0) {
-        Log::e("Failed get pixel format");
+        printf("Failed get pixel format");
     }
 
-    Log::d("[%s %d x %d bpp=%d]\n", path, width, height, bpp);
+    printf("[%s %d x %d bpp=%d]\n", path, width, height, bpp);
 
 	Bitmap* bmp = new Bitmap(width, height, bpp);
 	assert (bmp != 0);
@@ -291,7 +327,7 @@ bool Bitmap :: writePng(const char *path)
 
     fp = fopen(path, "wb");
     if (NULL == fp) {
-        Log::e("Failed open file\n");
+        printf("Failed open file\n");
         return false;
     }
 
@@ -309,7 +345,7 @@ bool Bitmap :: writePng(const char *path)
     }
 
     if (setjmp(png_jmpbuf(png_ptr))) {
-        Log::e("write file occur error");
+        printf("write file occur error");
         fclose(fp);
         png_destroy_write_struct(&png_ptr, &info_ptr);
         return false;

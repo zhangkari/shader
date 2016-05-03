@@ -23,6 +23,11 @@ class Bitmap {
 		static Bitmap* create(int width, int height, PixFmt fmt);
 		static Bitmap* load(const char* path);
 		bool save(const char* path);
+		void recycle();
+		int getWidth();
+		int getHeight();
+		PixFmt getFmt();
+		const char* const getBlock();
 		~Bitmap();
 
 	protected:
