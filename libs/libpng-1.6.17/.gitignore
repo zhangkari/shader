@@ -26,3 +26,6 @@ libs
 libpng16.so.16
 libpng16.so.16.17.0
 install_manifest.txt
+
+config.log
+config.status
