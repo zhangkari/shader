@@ -1,7 +1,8 @@
+#include <GL/glew.h>
 #include <GL/glut.h>
-#include <GL/glext.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "Bitmap.h"
 #include "Renderer.h"
@@ -9,6 +10,21 @@
 
 Renderer *gRenderer = NULL;
 Bitmap *gBitmap = NULL;
+
+/**
+ * Used for shader program
+ */
+GLuint gVbo;
+GLuint gProgram;
+GLuint gVtxShader;
+GLuint gFrgShader;
+
+#define VERTEX_SHADER_SOURCE 	"	\
+	void main() {					\
+									\
+}"									
+
+const char* FRAGMENT_SHADER_SOURCE = "";
 
 void init(int argc, char* argv[]) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -22,10 +38,32 @@ void init(int argc, char* argv[]) {
 		gBitmap = Bitmap::load(argv[1]);
 		if (NULL == gBitmap) {
 			printf("Failed load %s\n", argv[1]);
+			exit(2);
 		} else {
 			gRenderer->setArtwork(gBitmap);
 		}
 	}
+
+	glGenBuffers(1, &gVbo);
+	gProgram = glCreateProgram();
+	if (0 == gProgram) {
+		printf("Failed create program\n");
+		exit(3);
+	}
+	gVtxShader = glCreateShader(GL_VERTEX_SHADER);
+	if (0 == gVtxShader) {
+		printf("Failed create vertex shader\n");
+		exit(4);
+	}
+	gFrgShader = glCreateShader(GL_FRAGMENT_SHADER);
+	if (0 == gFrgShader) {
+		printf("Failed create fragment shader\n");
+		exit(5);
+	}
+
+
+	printf("strlen vertex shader source length:%lu\n", strlen(VERTEX_SHADER_SOURCE));
+
 }
 
 void onReshape(int w, int h) {
@@ -86,6 +124,11 @@ int main(int argc, char *argv[])
 	glutInitWindowPosition(300, 300);
 	glutInitWindowSize(600, 600);
 	glutCreateWindow("Opengl View");
+	GLenum err = glewInit();
+	if (GLEW_OK != err) {
+		printf("Error:%s\n", glewGetErrorString(err));
+		return -1;
+	}
 	init(argc, argv);
 	glutDisplayFunc(onDisplay);
 	glutReshapeFunc(onReshape);
