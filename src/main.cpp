@@ -9,6 +9,7 @@
 #include "Renderer.h"
 #include "RendererFactory.h"
 #include "ShaderManager.h"
+#include "System.h"
 
 Renderer *gRenderer = NULL;
 Bitmap *gBitmap = NULL;
@@ -33,7 +34,10 @@ void init(int argc, char* argv[]) {
 	}
 
 	if (2 == argc) {
+		uint64_t t1 = System :: current();
 		gBitmap = Bitmap::load(argv[1]);
+		uint64_t t2 = System :: current();
+		printf("Load %s cost %lu ms\n", argv[1], t2 - t1);
 		if (NULL == gBitmap) {
 			printf("Failed load %s\n", argv[1]);
 			exit(1);

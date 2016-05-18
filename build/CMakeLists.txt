@@ -21,6 +21,10 @@ ADD_SUBDIRECTORY(${libimage_dir} ./image)
 SET(librenderer_dir ${src_dir}/renderer)
 ADD_SUBDIRECTORY(${librenderer_dir} ./renderer)
 
+# libutil
+SET(libutil_dir ${src_dir}/utility)
+ADD_SUBDIRECTORY(${libutil_dir} ./utility)
+
 # libshadertest
 SET(libshdrtest_dir ${src_dir}/test)
 ADD_SUBDIRECTORY(${libshdrtest_dir} ./test)
@@ -30,4 +34,4 @@ AUX_SOURCE_DIRECTORY(${src_dir} src_files)
 
 # shader
 ADD_EXECUTABLE(shader ${src_dir}/main.cpp)
-TARGET_LINK_LIBRARIES(shader librenderer)
+TARGET_LINK_LIBRARIES(shader librenderer libutil)
