@@ -5,26 +5,24 @@
 #include <string.h>
 
 #include "Bitmap.h"
+#include "NormalEffect.h"
 #include "Renderer.h"
 #include "RendererFactory.h"
+#include "ShaderManager.h"
 
 Renderer *gRenderer = NULL;
 Bitmap *gBitmap = NULL;
+ShaderManager *gShaderMgr;
 
-/**
- * Used for shader program
- */
-GLuint gVbo;
-GLuint gProgram;
-GLuint gVtxShader;
-GLuint gFrgShader;
+#define VERTEX_SHADER_SOURCE 	"								\
+	void main() {												\
+		gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;	\
+}"
 
-#define VERTEX_SHADER_SOURCE 	"	\
-	void main() {					\
-									\
-}"									
-
-const char* FRAGMENT_SHADER_SOURCE = "";
+#define FRAGMENT_SHADER_SOURCE  "								\
+	void main() {												\
+		gl_FragColor = vec4(1.0, 0.0, 0.0, 0.9);				\
+}"
 
 void init(int argc, char* argv[]) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
@@ -38,32 +36,14 @@ void init(int argc, char* argv[]) {
 		gBitmap = Bitmap::load(argv[1]);
 		if (NULL == gBitmap) {
 			printf("Failed load %s\n", argv[1]);
-			exit(2);
+			exit(1);
 		} else {
 			gRenderer->setArtwork(gBitmap);
 		}
 	}
 
-	glGenBuffers(1, &gVbo);
-	gProgram = glCreateProgram();
-	if (0 == gProgram) {
-		printf("Failed create program\n");
-		exit(3);
-	}
-	gVtxShader = glCreateShader(GL_VERTEX_SHADER);
-	if (0 == gVtxShader) {
-		printf("Failed create vertex shader\n");
-		exit(4);
-	}
-	gFrgShader = glCreateShader(GL_FRAGMENT_SHADER);
-	if (0 == gFrgShader) {
-		printf("Failed create fragment shader\n");
-		exit(5);
-	}
-
-
-	printf("strlen vertex shader source length:%lu\n", strlen(VERTEX_SHADER_SOURCE));
-
+	gShaderMgr = ShaderManager :: getInstance();
+	gShaderMgr->useEffect(new NormalEffect);
 }
 
 void onReshape(int w, int h) {
