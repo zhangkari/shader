@@ -18,10 +18,10 @@ void RealtimeRenderer::draw(int numInstance) {
 				return;
 		}
 
-		int fmt = GL_BGR;
+		int fmt = GL_RGB;
 		switch (mArtwork->getFmt()) {
 				case RGBA32:
-						fmt = GL_BGRA;
+						fmt = GL_RGBA;
 						break;
 		}
 
