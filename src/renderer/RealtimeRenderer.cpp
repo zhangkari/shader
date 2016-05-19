@@ -14,22 +14,22 @@ RealtimeRenderer :: ~RealtimeRenderer() {
 
 void RealtimeRenderer::draw(int numInstance) {
 
-		if (mArtwork == NULL) {
-				return;
-		}
+	if (mArtwork == NULL) {
+		return;
+	}
 
-		int fmt = GL_RGB;
-		switch (mArtwork->getFmt()) {
-				case RGBA32:
-						fmt = GL_RGBA;
-						break;
-		}
+	int fmt = GL_RGB;
+	switch (mArtwork->getFmt()) {
+		case RGBA32:
+			fmt = GL_RGBA;
+			break;
+	}
 
-		glDrawPixels(mArtwork->getWidth(), 
-						mArtwork->getHeight(), 
-						fmt, 
-						GL_UNSIGNED_BYTE, 
-						mArtwork->getBlock());
+	glDrawPixels(mArtwork->getWidth(), 
+			mArtwork->getHeight(), 
+			fmt, 
+			GL_UNSIGNED_BYTE, 
+			mArtwork->getBlock());
 
 
 }
