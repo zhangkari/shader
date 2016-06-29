@@ -22,6 +22,8 @@ class Effect {
 	public:
 		Effect();
 		virtual ~Effect();
+		bool setVertexSource(const char* source);
+		bool setFragmentSource(const char* source);
 
 	protected:
 		virtual void work() = 0;

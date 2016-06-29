@@ -11,6 +11,10 @@
 #include "ShaderManager.h"
 #include "System.h"
 
+
+#define WIN_WIDTH 600
+#define WIN_HEIGHT 600
+
 Renderer *gRenderer = NULL;
 Bitmap *gBitmap = NULL;
 ShaderManager *gShaderMgr;
@@ -47,7 +51,13 @@ void init(int argc, char* argv[]) {
 	}
 
 	gShaderMgr = ShaderManager :: getInstance();
-	gShaderMgr->useEffect(new NormalEffect);
+
+	Effect *normalEffect = new NormalEffect;
+	/*
+	normalEffect->setVertexSource(VERTEX_SHADER_SOURCE);
+	normalEffect->setFragmentSource(FRAGMENT_SHADER_SOURCE);
+	*/
+	gShaderMgr->useEffect(normalEffect);
 }
 
 void onReshape(int w, int h) {
@@ -103,7 +113,7 @@ int main(int argc, char *argv[])
 	glutInit(&argc, argv);
 	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
 	glutInitWindowPosition(300, 300);
-	glutInitWindowSize(600, 600);
+	glutInitWindowSize(WIN_WIDTH, WIN_HEIGHT);
 	glutCreateWindow("Opengl View");
 	GLenum err = glewInit();
 	if (GLEW_OK != err) {

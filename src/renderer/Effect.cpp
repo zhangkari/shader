@@ -5,6 +5,7 @@
  * date:		2016-5-18
  ***********************************/
 
+#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -12,20 +13,22 @@
 #include "Effect.h"
 
 Effect :: Effect() {
-
+	mVbo = 0;
+	mVtxShader = 0;
+	mFrgShader = 0;
 }
 
 Effect :: ~Effect() {
 
 }
 
-GLuint Effect :: createShader(ShaderType, const char* shaderSource) {
+GLuint Effect :: createShader(ShaderType type, const char* shaderSource) {
 	if (NULL == shaderSource) {
 		printf("Invalid shader source.\n");
 		return 0;
 	}
 
-	GLuint shader = glCreateShader(GL_VERTEX_SHADER);
+	GLuint shader = glCreateShader(type);
 	if (0 == shader) {
 		printf("Failed create shader\n");
 		return 0;
@@ -45,3 +48,16 @@ GLuint Effect :: createShader(ShaderType, const char* shaderSource) {
 
 	return shader;
 }
+
+bool Effect :: setVertexSource(const char* source) {
+	assert (0 != source);
+	mVtxShader = createShader(VERTEX_SHADER, source);
+	return mVtxShader == 0;
+}
+
+bool Effect :: setFragmentSource(const char* source) {
+	assert (0 != source);
+	mFrgShader = createShader(FRGMNT_SHADER, source);
+	return mFrgShader == 0;
+}
+

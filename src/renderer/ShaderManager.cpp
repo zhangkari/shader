@@ -38,23 +38,27 @@ ShaderManager* ShaderManager :: getInstance() {
 
 void ShaderManager :: useEffect(Effect *effect) {
 
-	if (0 != mCurVtxShader) {
-		glDeleteShader(mCurVtxShader);	
-	}
-
-	if (0 != mCurFrgShader) {
-		glDeleteShader(mCurFrgShader);
-	}
-
 	if (NULL == effect) {
-		glUseProgram(0);
+		printf("effect is null \n");
 		return;
 	}
 
-	glAttachShader(mProgram, effect->mVtxShader);
-	glAttachShader(mProgram, effect->mFrgShader);
-	glLinkProgram(mProgram);
+	if (effect->mVtxShader == 0 && effect->mFrgShader == 0) {
+		printf("No valid shaders \n");
+		return;
+	}
 
+	if (0 != effect->mVtxShader) {
+		glDeleteShader(mCurVtxShader);	
+		glAttachShader(mProgram, effect->mVtxShader);
+	}
+
+	if (0 != effect->mFrgShader) {
+		glDeleteShader(mCurFrgShader);
+		glAttachShader(mProgram, effect->mFrgShader);
+	}
+
+	glLinkProgram(mProgram);
 	GLint linked;
 	glGetProgramiv(mProgram, GL_LINK_STATUS, &linked);
 	if (!linked) {

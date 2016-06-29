@@ -9,6 +9,7 @@
 #define RENDERER__H__
 
 #include <GL/gl.h>
+#include <GL/glu.h>
 #include <GL/glext.h>
 
 #include "Bitmap.h"
