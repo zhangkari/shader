@@ -5,6 +5,14 @@
 *.lo
 *.a
 *.la
+*.Plo
+*.Po
+libs/libpng-1.6.17/.deps/*
+libs/libpng-1.6.17/*.Plo
+libs/libpng-1.6.17/*.Po
+libs/libpng-1.6.17/libtool
+libs/libpng-1.6.17/contrib/libtests/.deps/*
+libs/libpng-1.6.17/contrib/tools/.deps/*
 
 #
 # Ignore files in build except build.sh & CMakeLists.txt
