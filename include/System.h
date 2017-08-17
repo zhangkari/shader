@@ -13,12 +13,20 @@
 class System {
 
 	public:
-
 		/*
-		 * return current time in milisecond
+		 * return current time in millisecond
 		 */
 		static uint64_t current();
 
+		/*
+		 * return current time in microsecond
+		 */
+		static uint64_t moment();
+
+        /*
+         * Remember call free() to release memory ! 
+         */
+        static char* loadTextFile(const char* path);
 };
 
 #endif

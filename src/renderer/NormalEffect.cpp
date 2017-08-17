@@ -6,9 +6,9 @@
  ***********************************/
 
 #include <stdio.h>
-
+#include "Log.h"
 #include "NormalEffect.h"
 
 void NormalEffect :: work() {
-	printf("NormalEffect :: work()\n");
+
 }

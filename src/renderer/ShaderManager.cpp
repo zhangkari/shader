@@ -9,6 +9,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <GL/glew.h>
+#include "Log.h"
 #include "ShaderManager.h"
 
 ShaderManager* ShaderManager :: sInstance = NULL;
@@ -23,7 +24,7 @@ ShaderManager :: ~ShaderManager() {
 ShaderManager :: ShaderManager() {
 	mProgram = glCreateProgram();
 	if (0 == mProgram) {
-		printf("Failed create program\n");
+		Log::d("Failed create program\n");
 		exit(1);
 	}
 }
@@ -39,12 +40,12 @@ ShaderManager* ShaderManager :: getInstance() {
 void ShaderManager :: useEffect(Effect *effect) {
 
 	if (NULL == effect) {
-		printf("effect is null \n");
+		Log::d("effect is null \n");
 		return;
 	}
 
 	if (effect->mVtxShader == 0 && effect->mFrgShader == 0) {
-		printf("No valid shaders \n");
+		Log::d("No valid shaders \n");
 		return;
 	}
 
@@ -62,17 +63,17 @@ void ShaderManager :: useEffect(Effect *effect) {
 	GLint linked;
 	glGetProgramiv(mProgram, GL_LINK_STATUS, &linked);
 	if (!linked) {
-		printf("Failed link shader program:\n");
+		Log::d("Failed link shader program:\n");
 
 		GLint log_cnt;
 		glGetProgramiv(mProgram, GL_INFO_LOG_LENGTH, &log_cnt);
 		if (log_cnt <= 0) {
-			printf("Invalid log length.\n");
+			Log::d("Invalid log length.\n");
 		} else {
 			char *buf = new char[log_cnt];
 			GLsizei len;
 			glGetProgramInfoLog(mProgram, log_cnt, &len, buf);
-			printf("%s\n", buf);
+			Log::d("program info:%s\n", buf);
 			delete []buf;
 		}
 
@@ -81,10 +82,18 @@ void ShaderManager :: useEffect(Effect *effect) {
 
 	GLint shdr_cnt;
 	glGetProgramiv(mProgram, GL_ATTACHED_SHADERS, &shdr_cnt);
-	printf("Attached %d shaders.\n", shdr_cnt);
+	Log::d("Attached %d shaders.\n", shdr_cnt);
+
+    const GLubyte *version = glGetString(GL_VERSION);
+    Log::d("version:%s\n", version);
+    const GLubyte *vendor = glGetString(GL_VENDOR);
+    Log::d("verdor:%s\n", vendor);
+    const GLubyte *renderer = glGetString(GL_RENDERER);
+    Log::d("renderer:%s\n", renderer);
+    const GLubyte *slver = glGetString(GL_SHADING_LANGUAGE_VERSION);
+    Log::d("shader version:%s\n", slver);
 
 	effect->work();
-	glUseProgram(mProgram);
 	mCurVtxShader = effect->mVtxShader;
 	mCurFrgShader = effect->mFrgShader;
 }

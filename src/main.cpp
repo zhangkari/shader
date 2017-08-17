@@ -5,35 +5,27 @@
 #include <string.h>
 
 #include "Bitmap.h"
+#include "Log.h"
 #include "NormalEffect.h"
 #include "Renderer.h"
 #include "RendererFactory.h"
 #include "ShaderManager.h"
 #include "System.h"
 
-
 #define WIN_WIDTH 600
 #define WIN_HEIGHT 600
+
+#define INTERVAL 50
 
 Renderer *gRenderer = NULL;
 Bitmap *gBitmap = NULL;
 ShaderManager *gShaderMgr;
 
-#define VERTEX_SHADER_SOURCE 	"								\
-	void main() {												\
-		gl_Position = gl_ModelViewProjectionMatrix * gl_Vertex;	\
-}"
-
-#define FRAGMENT_SHADER_SOURCE  "								\
-	void main() {												\
-		gl_FragColor = vec4(1.0, 0.0, 0.0, 0.9);				\
-}"
-
 void init(int argc, char* argv[]) {
 	glClearColor(0.0, 0.0, 0.0, 0.0);
 	gRenderer = RendererFactory::createRenderer(TYPE_REALTIME);
 	if (NULL == gRenderer) {
-		printf("Failed create renderer.\n");
+        Log::d("Failed create renderer.\n");
 		exit(1);
 	}
 
@@ -41,9 +33,9 @@ void init(int argc, char* argv[]) {
 		uint64_t t1 = System :: current();
 		gBitmap = Bitmap::load(argv[1]);
 		uint64_t t2 = System :: current();
-		printf("Load %s cost %lu ms\n", argv[1], t2 - t1);
+        Log::d("Load %s cost %lu ms\n", argv[1], t2 - t1);
 		if (NULL == gBitmap) {
-			printf("Failed load %s\n", argv[1]);
+            Log::d("Failed load %s\n", argv[1]);
 			exit(1);
 		} else {
 			gRenderer->setArtwork(gBitmap);
@@ -53,26 +45,20 @@ void init(int argc, char* argv[]) {
 	gShaderMgr = ShaderManager :: getInstance();
 
 	Effect *normalEffect = new NormalEffect;
-	/*
-	normalEffect->setVertexSource(VERTEX_SHADER_SOURCE);
-	normalEffect->setFragmentSource(FRAGMENT_SHADER_SOURCE);
-	*/
+    char *vert = System::loadTextFile("vert.shr");
+    char *frag = System::loadTextFile("frag.shr");
+	normalEffect->setVertexSource(vert);
+	normalEffect->setFragmentSource(frag);
+    free (vert);
+    free (frag);
 	gShaderMgr->useEffect(normalEffect);
 }
 
 void onReshape(int w, int h) {
-	printf("onReshape()\n");
-	glViewport(0, 0, (GLsizei)w, (GLsizei) h);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(60, (GLfloat)w/(GLfloat)h, 1.0, 20.0);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(0.0, 0.0, 5.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0);
+	Log::d("onReshape()\n");
 }
 
 void onDisplay() {
-	printf("onDisplay()\n");
 	glClear(GL_COLOR_BUFFER_BIT);
 	glColor3f(1.0, 1.0, 1.0);
 
@@ -103,26 +89,46 @@ void onNormalKeyClicked(unsigned char key, int x, int y) {
 }
 
 void onSpecialKeyClicked(int key, int x, int y) {
-	if (key == GLUT_KEY_UP) {
-		printf("up\n");
-	}
+    switch (key) {
+        case GLUT_KEY_UP:
+            Log::d("up\n");
+            break;
+
+        case GLUT_KEY_LEFT:
+            Log::d("left\n");
+            break;
+
+        case GLUT_KEY_RIGHT:
+            Log::d("right\n");
+            break;
+
+        case GLUT_KEY_DOWN:
+            Log::d("down\n");
+            break;
+    }
+}
+
+void onTimer(int id) {
+    glutPostRedisplay();
+    glutTimerFunc(INTERVAL, onTimer, 1);
 }
 
 int main(int argc, char *argv[])
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
+	glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE);
 	glutInitWindowPosition(300, 300);
 	glutInitWindowSize(WIN_WIDTH, WIN_HEIGHT);
-	glutCreateWindow("Opengl View");
+	glutCreateWindow(argv[1]);
 	GLenum err = glewInit();
 	if (GLEW_OK != err) {
-		printf("Error:%s\n", glewGetErrorString(err));
+		Log::d("Error:%s\n", glewGetErrorString(err));
 		return -1;
 	}
 	init(argc, argv);
 	glutDisplayFunc(onDisplay);
 	glutReshapeFunc(onReshape);
+    glutTimerFunc(INTERVAL, onTimer, 1);
 	glutKeyboardFunc(onNormalKeyClicked);
 	glutSpecialFunc(onSpecialKeyClicked);
 	glutMainLoop();

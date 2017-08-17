@@ -24,6 +24,18 @@ class Effect {
 		virtual ~Effect();
 		bool setVertexSource(const char* source);
 		bool setFragmentSource(const char* source);
+        static const char* getShaderTypeName(ShaderType type) {
+            switch (type) {
+                case VERTEX_SHADER:
+                    return "vertex shader";
+
+                case FRGMNT_SHADER:
+                    return "fragment shader";
+
+                default:
+                    return "invalid shader";
+            }
+        };
 
 	protected:
 		virtual void work() = 0;

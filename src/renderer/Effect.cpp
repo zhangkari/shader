@@ -11,6 +11,7 @@
 #include <string.h>
 #include <GL/glew.h>
 #include "Effect.h"
+#include "Log.h"
 
 Effect :: Effect() {
 	mVbo = 0;
@@ -41,7 +42,12 @@ GLuint Effect :: createShader(ShaderType type, const char* shaderSource) {
 	GLint compiled;
 	glGetShaderiv(shader, GL_COMPILE_STATUS, &compiled);
 	if (!compiled) {
-		printf("Failed compile shader.\n");
+
+#ifdef DEBUG
+        char info[1024] = {0};
+        glGetInfoLogARB(shader, sizeof(info), NULL, info);
+        Log::d("Failed compile %s:[ %s].\n", Effect::getShaderTypeName(type), info);
+#endif
 		glDeleteShader(shader);
 		return 0;
 	}

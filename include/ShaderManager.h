@@ -16,6 +16,9 @@ class ShaderManager {
 		virtual ~ShaderManager();
 		void useEffect(Effect *effect);
 		static ShaderManager* getInstance();
+        GLuint getProgram() {
+            return mProgram;
+        }
 
 	protected:
 		ShaderManager();

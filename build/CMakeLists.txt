@@ -4,6 +4,13 @@
 PROJECT(shader)
 CMAKE_MINIMUM_REQUIRED (VERSION 2.6)
 
+#Please remove me in Release
+ADD_DEFINITIONS(-DDEBUG)
+
+# support Debug and Release
+SET(CMAKE_CXX_CFLAGS_RELEASE "$ENV{CXXFLAGS} -O3 -Wall")
+SET(CMAKE_CXX_CFLAGS_DEBUG "$ENV{CXXFLAGS} -O0 -Wall -g -ggdb")
+
 # all the header files dir
 SET(include_dir ../include)
 SET(shdrtest_dir ../src/test)

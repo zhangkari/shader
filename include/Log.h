@@ -8,23 +8,35 @@
 #ifndef LOG__H__
 #define LOG__H__
 
+#include <stdarg.h>
 #include <stdio.h>
 
-#ifdef DEBUG
-#define print_log(...) printf(...)
-#else 
-#define rpint_log(fmt, args...)
-#endif
-
 class Log {
-	public:
-		static void e(...) {
-//			print_log(...);
-		}
+    public:
+        static void e(const char* format, ...) {
+            va_list args;
+            va_start(args, format);
+            vprintf(format, args);
+            va_end(args);
+            printf(" %s:%d\n", __FILE__, __LINE__);
+        }
 
-		static void d(...) {
-//			print_log(...);
-		}
+        static void d(const char* format, ...) {
+#ifdef DEBUG
+            va_list args;
+            va_start(args, format);
+            vprintf(format, args);
+            va_end(args);
+#endif
+        }
+
+    protected:
+        static void trace(const char *format, ...) {
+            va_list args;
+            va_start(args, format);
+            vprintf(format, args);
+            va_end(args);
+        }
 };
 
 #endif
