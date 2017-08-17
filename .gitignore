@@ -19,3 +19,5 @@ libs/libpng-1.6.17/contrib/tools/.deps/*
 build/*
 !/build/build.sh
 !/build/CMakeLists.txt
+!/build/vert.shr
+!/build/frag.shr

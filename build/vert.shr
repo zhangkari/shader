@@ -1,0 +1,11 @@
+
+#version 130
+
+attribute vec3 aVert;
+attribute vec4 aColor;
+varying lowp vec4 vColor;
+
+void main() {
+    gl_Position = vec4(aVert, 1);    
+    vColor = aColor;
+}
